@@ -85,7 +85,7 @@ function showWeather() {
 
     if (localStorage.getItem('city')) {
         //weather by user city
-        fetch(`http://api.openweathermap.org/data/2.5/weather?q=${localStorage.getItem('city')}&units=metric&appid=a0ed7e214efe205f9c5d3c16e45a29dc`)
+        fetch(`https://api.openweathermap.org/data/2.5/weather?q=${localStorage.getItem('city')}&units=metric&appid=a0ed7e214efe205f9c5d3c16e45a29dc`)
             .then(data => data.json())
             .then(json => show(json))
             .catch(err => console.log(err));
@@ -94,7 +94,7 @@ function showWeather() {
         //weather by geolocation
         navigator.geolocation.getCurrentPosition(pos => {
             const crd = pos.coords;
-            fetch(`http://api.openweathermap.org/data/2.5/weather?lat=${crd.latitude}&lon=${crd.longitude}&units=metric&appid=a0ed7e214efe205f9c5d3c16e45a29dc`).then(res => res.json()).then(json => show(json)).catch(err => console.log(err));
+            fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${crd.latitude}&lon=${crd.longitude}&units=metric&appid=a0ed7e214efe205f9c5d3c16e45a29dc`).then(res => res.json()).then(json => show(json)).catch(err => console.log(err));
         }, err => {
             console.warn(`ERROR(${err.code}): ${err.message}`);
         }, options);
