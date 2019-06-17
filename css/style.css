@@ -11,20 +11,28 @@ body {
     height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     font-size: 16px;
+    color: #fff;
+    text-shadow: 1px 1px 2px #000;
 }
 
 #top-bar {
-    position: fixed;
-    top: 0;
-    left: 0;
     width: 100%;
     display: flex;
     justify-content: space-between;
     padding: 20px 6vw;
     font-size: 1.3rem;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 20px;
+    text-align: center;
 }
 
 time {
@@ -34,11 +42,17 @@ time {
 h1 {
     font-size: 2.2rem;
     margin: 10px 0 50px;
+    
 }
 
+/* #name {
+    margin-left: 10px;
+} */
+
 form {
-    margin-top: 10vh;
-    width: 35vw;
+    margin-top: 6vh;
+    width: 80vw;
+    max-width: 400px;
     position: relative;
 }
 
@@ -62,6 +76,9 @@ input {
     font-size: 1.4rem;
     /* margin-top: 10px; */
     padding-bottom: 10px;
+    background-color: transparent;
+    color: #fff;
+    text-shadow: 1px 1px 2px #000;
 }
 
 input:focus {
@@ -69,18 +86,19 @@ input:focus {
 }
 
 #quote {
-    width: 70%;
-    margin-top: 15vh;
+    max-width: 70%;
+    margin-top: 50px;
     text-align: center;
 }
 
 #quote #text {
-    font-size: 1.3rem;
+    font-size: 0.9rem;
     cursor: pointer;
 }
 
 #quote #author {
     font-size: 0.9rem;
+    color: #666;
     font-style: italic;
     margin-top: 10px;
     opacity: 0;
@@ -92,13 +110,27 @@ input:focus {
 }
 
 footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
+    width: 100%;
     padding: 20px;
 }
 
 #image-source a {
     text-decoration: none;
-    color: #000;
+    color: #fff;
+    text-shadow: 1px 1px 2px #000;
+}
+
+#image-source a:hover {
+    color: #03A9F4;
+}
+
+@media (max-width: 576px){
+
+    #time {
+        font-size: 5rem;
+    }
+
+    #quote {
+        display: none;
+    }
 }

@@ -11,20 +11,22 @@
 </head>
 
 <body>
-    <div id="top-bar">
+    <header id="top-bar">
         <section id="date">Sunday,16th June 2019</section>
         <section id="weather"></section>
-    </div>
-    <time id="time"></time>
-    <h1><span id="greeting">Good Day</span>, <span id="name" contenteditable="true">Grzegorz</span></h1>
-    <form method="get" action="http://www.google.com/search" autocomplete="false">
-        <input type="text" name="q" id="query" autofocus="true" />
-        <label for="query">What`s on your mind this time?</label>
+    </header>
+    <main>
+        <time id="time"></time>
+        <h1><span id="greeting">Good Day, </span><span id="name" contenteditable="true">User</span></h1>
+        <form method="get" action="http://www.google.com/search" autocomplete="false">
+        <input type="text" name="q" id="query" autofocus="true" autocomplete="false" />
+        <label for="query">What are you looking for this time?</label>
     </form>
     <div id="quote">
         <p id="text">Everything has beauty, but not everyone can see.</p>
         <p id="author">Confucius</p>
     </div>
+    </main>
     <footer>
         <p id="image-source">
             Photo by <a href="#">Grzegorz Bach</a>

@@ -4,6 +4,7 @@ const date = document.getElementById('date');
 const weather = document.getElementById('weather');
 const time = document.getElementById('time');
 const greeting = document.getElementById('greeting');
+const name = document.getElementById('name');
 const formInput = document.getElementById('query');
 const quoteText = document.getElementById('text');
 const quoteAuthor = document.getElementById('author');
@@ -55,7 +56,7 @@ function showWeather() {
 
     navigator.geolocation.getCurrentPosition(pos => {
         const crd = pos.coords;
-        fetch(`http://api.openweathermap.org/data/2.5/weather?lat=${crd.latitude}&lon=${crd.longitude}&units=metric&appid=a0ed7e214efe205f9c5d3c16e45a29dc`).then(res => res.json()).then(json => {
+        fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${crd.latitude}&lon=${crd.longitude}&units=metric&appid=a0ed7e214efe205f9c5d3c16e45a29dc`).then(res => res.json()).then(json => {
 
             let condition;
             switch (json.weather[0].main) {
@@ -90,7 +91,7 @@ function showWeather() {
 function showTime() {
     const now = new Date();
     const am_pm = now.getHours() < 12 ? 'AM' : 'PM';
-    const dayTime = now.getHours() < 12 ? 'Good Morning' : now.getHours() < 18 ? 'Good Afternoon' : ' Good Evening';
+    const dayTime = now.getHours() < 12 ? 'Good Morning, ' : now.getHours() < 18 ? 'Good Afternoon, ' : ' Good Evening, ';
     const newTime = `${now.getHours() % 12 || now.getHours()}:${now.getMinutes() < 10 ? '0' + now.getMinutes() : now.getMinutes()} ${am_pm}`;
 
     if (time.innerHTML !== newTime) {
@@ -105,6 +106,33 @@ function showTime() {
 
     setTimeout(showTime, 1000);
 }
+
+//Show user name
+function showUserName(){
+    const username = localStorage.getItem('name');
+    if(username){
+        name.innerText = username;
+    }else {
+        name.innerText = "[enter name]";
+    }
+}
+
+//Edit user name
+function nameEdit(e){
+    localStorage.setItem('name', e.target.innerText);
+    showUserName();
+}
+
+name.addEventListener('click', (e) => {
+    e.target.innerText = ' ';
+});
+
+name.addEventListener('blur', nameEdit);
+name.addEventListener('keydown', e =>{
+    if(e.which === 13 || e.keyCode === 13){
+        e.target.blur();
+    }
+})
 
 //Manage input 'not-empty' class
 
@@ -127,8 +155,31 @@ function showQuote() {
         });
 }
 
+//Load Background
+
+function loadBackground(){
+    let background;
+    const now = new Date();
+    if(now.getHours() == localStorage.getItem('backgroundLoadTime')){
+        document.body.style.backgroundImage = `url(${JSON.parse(localStorage.getItem('background')).urls.full})`;
+        document.getElementById('image-source').innerHTML = `Photo by <a href="${JSON.parse(localStorage.getItem('background')).links.html}" target="_blank">${JSON.parse(localStorage.getItem('background')).user.name}</a>`;
+    }else{
+        fetch('https://api.unsplash.com/photos/random?query=nature&client_id=38d6391d753e502dc227517e6c362a05623c3686fb40c7f1168e30ee1a95ed4d')
+        .then(data => data.json())
+        .then(json => {
+            localStorage.setItem('background', JSON.stringify(json));
+            localStorage.setItem('backgroundLoadTime', now.getHours());
+            document.body.style.backgroundImage = `url(${JSON.parse(localStorage.getItem('background')).urls.full})`;
+            document.getElementById('image-source').innerHTML = `Photo by <a href="${JSON.parse(localStorage.getItem('background')).links.html}" target="_blank">${JSON.parse(localStorage.getItem('background')).user.name}</a>`;
+        })
+    }
+        
+}
+
 //Run
 showDate();
 showWeather();
 showTime();
+showUserName();
 showQuote();
+loadBackground();
