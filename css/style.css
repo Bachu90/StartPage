@@ -16,6 +16,8 @@ body {
     font-size: 16px;
     color: #fff;
     text-shadow: 1px 1px 2px #000;
+    background-size: cover;
+    background-position: center;
 }
 
 #top-bar {
@@ -24,6 +26,21 @@ body {
     justify-content: space-between;
     padding: 20px 6vw;
     font-size: 1.3rem;
+}
+
+.geolocation {
+    display: inline;
+    margin-right: 10px;
+    font-size: 1.3rem;
+    cursor: pointer;
+}
+
+.geolocation:hover {
+    color: #03A9F4;
+}
+
+.geolocation.hidden {
+    display: none;
 }
 
 main {
@@ -45,10 +62,6 @@ h1 {
     
 }
 
-/* #name {
-    margin-left: 10px;
-} */
-
 form {
     margin-top: 6vh;
     width: 80vw;
@@ -58,9 +71,9 @@ form {
 
 label {
     position: absolute;
-    top: 0;
+    bottom: 10px;
     left: 0;
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     transform: translate(0,0) scale(1);
     transition: transform .3s;
 }
@@ -92,13 +105,13 @@ input:focus {
 }
 
 #quote #text {
-    font-size: 0.9rem;
+    font-size: 1.1rem;
     cursor: pointer;
 }
 
 #quote #author {
     font-size: 0.9rem;
-    color: #666;
+    color: #999;
     font-style: italic;
     margin-top: 10px;
     opacity: 0;

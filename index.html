@@ -12,24 +12,25 @@
 
 <body>
     <header id="top-bar">
-        <section id="date">Sunday,16th June 2019</section>
-        <section id="weather"></section>
+        <section id="date"></section>
+        <section><i class="wi wi-wind-direction geolocation"></i><span id="city" contenteditable="true"></span><span
+                id="weather"></span>
+        </section>
     </header>
     <main>
         <time id="time"></time>
         <h1><span id="greeting">Good Day, </span><span id="name" contenteditable="true">User</span></h1>
-        <form method="get" action="http://www.google.com/search" autocomplete="false">
-        <input type="text" name="q" id="query" autofocus="true" autocomplete="false" />
-        <label for="query">What are you looking for this time?</label>
-    </form>
-    <div id="quote">
-        <p id="text">Everything has beauty, but not everyone can see.</p>
-        <p id="author">Confucius</p>
-    </div>
+        <form method="get" action="https://www.google.com/search" autocomplete="false">
+            <input type="text" name="q" id="query" autofocus="true" autocomplete="false" />
+            <label for="query">What are you looking for this time?</label>
+        </form>
+        <div id="quote">
+            <p id="text"></p>
+            <p id="author"></p>
+        </div>
     </main>
     <footer>
         <p id="image-source">
-            Photo by <a href="#">Grzegorz Bach</a>
         </p>
     </footer>
     <script src="js/script.js"></script>

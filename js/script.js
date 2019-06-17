@@ -2,6 +2,8 @@
 
 const date = document.getElementById('date');
 const weather = document.getElementById('weather');
+const city = document.getElementById('city');
+const geolocation = document.querySelector('.geolocation');
 const time = document.getElementById('time');
 const greeting = document.getElementById('greeting');
 const name = document.getElementById('name');
@@ -54,38 +56,74 @@ function showWeather() {
         maximumAge: 0
     };
 
-    navigator.geolocation.getCurrentPosition(pos => {
-        const crd = pos.coords;
-        fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${crd.latitude}&lon=${crd.longitude}&units=metric&appid=a0ed7e214efe205f9c5d3c16e45a29dc`).then(res => res.json()).then(json => {
+    function show(json) {
+        let condition;
+        switch (json.weather[0].main) {
+            case 'Clear':
+                condition = dayTime === 'day' ? 'sunny' : 'clear';
+                break;
+            case 'Clouds':
+                condition = 'cloudy';
+                break;
+            case 'Rain':
+                condition = 'rain';
+                break;
+            case 'Snow':
+                condition = 'snow';
+                break;
+            case 'Thunderstorm':
+                condition = 'thunderstorm';
+                break;
+            default:
+                condition = null;
+                break;
+        }
+        city.innerHTML = json.name;
+        weather.innerHTML = `, ${Math.round(json.main.temp)}&deg;C <i
+        class="wi wi-${dayTime}-${condition}"></i>`;
+    }
 
-            let condition;
-            switch (json.weather[0].main) {
-                case 'Clear':
-                    condition = dayTime === 'day' ? 'sunny' : 'clear';
-                    break;
-                case 'Clouds':
-                    condition = 'cloudy';
-                    break;
-                case 'Rain':
-                    condition = 'rain';
-                    break;
-                case 'Snow':
-                    condition = 'snow';
-                    break;
-                case 'Thunderstorm':
-                    condition = 'thunderstorm';
-                    break;
-                default:
-                    condition = null;
-                    break;
-            }
-            weather.innerHTML = `${json.name}, ${Math.round(json.main.temp)}&deg;C <i
-            class="wi wi-${dayTime}-${condition}"></i>`;
-        });
-    }, err => {
-        console.warn(`ERROR(${err.code}): ${err.message}`);
-    }, options);
+    if (localStorage.getItem('city')) {
+        //weather by user city
+        fetch(`http://api.openweathermap.org/data/2.5/weather?q=${localStorage.getItem('city')}&units=metric&appid=a0ed7e214efe205f9c5d3c16e45a29dc`)
+            .then(data => data.json())
+            .then(json => show(json))
+            .catch(err => console.log(err));
+        geolocation.classList.remove('hidden');
+    } else {
+        //weather by geolocation
+        navigator.geolocation.getCurrentPosition(pos => {
+            const crd = pos.coords;
+            fetch(`http://api.openweathermap.org/data/2.5/weather?lat=${crd.latitude}&lon=${crd.longitude}&units=metric&appid=a0ed7e214efe205f9c5d3c16e45a29dc`).then(res => res.json()).then(json => show(json)).catch(err => console.log(err));
+        }, err => {
+            console.warn(`ERROR(${err.code}): ${err.message}`);
+        }, options);
+        geolocation.classList.add('hidden');
+    }
 }
+
+//Edit weather city
+function cityEdit(e) {
+    localStorage.setItem('city', e.target.innerText);
+    showWeather();
+}
+
+city.addEventListener('click', (e) => {
+    e.target.innerText = ' ';
+});
+
+city.addEventListener('blur', cityEdit);
+city.addEventListener('keydown', e => {
+    if (e.which === 13 || e.keyCode === 13) {
+        e.target.blur();
+    }
+})
+
+//Get city from geolocation
+geolocation.addEventListener('click', () => {
+    localStorage.removeItem('city');
+    showWeather();
+})
 
 //Show current time
 function showTime() {
@@ -108,17 +146,17 @@ function showTime() {
 }
 
 //Show user name
-function showUserName(){
+function showUserName() {
     const username = localStorage.getItem('name');
-    if(username){
+    if (username) {
         name.innerText = username;
-    }else {
+    } else {
         name.innerText = "[enter name]";
     }
 }
 
 //Edit user name
-function nameEdit(e){
+function nameEdit(e) {
     localStorage.setItem('name', e.target.innerText);
     showUserName();
 }
@@ -128,8 +166,8 @@ name.addEventListener('click', (e) => {
 });
 
 name.addEventListener('blur', nameEdit);
-name.addEventListener('keydown', e =>{
-    if(e.which === 13 || e.keyCode === 13){
+name.addEventListener('keydown', e => {
+    if (e.which === 13 || e.keyCode === 13) {
         e.target.blur();
     }
 })
@@ -157,23 +195,23 @@ function showQuote() {
 
 //Load Background
 
-function loadBackground(){
+function loadBackground() {
     let background;
     const now = new Date();
-    if(now.getHours() == localStorage.getItem('backgroundLoadTime')){
+    if (now.getHours() == localStorage.getItem('backgroundLoadTime')) {
         document.body.style.backgroundImage = `url(${JSON.parse(localStorage.getItem('background')).urls.full})`;
         document.getElementById('image-source').innerHTML = `Photo by <a href="${JSON.parse(localStorage.getItem('background')).links.html}" target="_blank">${JSON.parse(localStorage.getItem('background')).user.name}</a>`;
-    }else{
+    } else {
         fetch('https://api.unsplash.com/photos/random?query=nature&client_id=38d6391d753e502dc227517e6c362a05623c3686fb40c7f1168e30ee1a95ed4d')
-        .then(data => data.json())
-        .then(json => {
-            localStorage.setItem('background', JSON.stringify(json));
-            localStorage.setItem('backgroundLoadTime', now.getHours());
-            document.body.style.backgroundImage = `url(${JSON.parse(localStorage.getItem('background')).urls.full})`;
-            document.getElementById('image-source').innerHTML = `Photo by <a href="${JSON.parse(localStorage.getItem('background')).links.html}" target="_blank">${JSON.parse(localStorage.getItem('background')).user.name}</a>`;
-        })
+            .then(data => data.json())
+            .then(json => {
+                localStorage.setItem('background', JSON.stringify(json));
+                localStorage.setItem('backgroundLoadTime', now.getHours());
+                document.body.style.backgroundImage = `url(${JSON.parse(localStorage.getItem('background')).urls.full})`;
+                document.getElementById('image-source').innerHTML = `Photo by <a href="${JSON.parse(localStorage.getItem('background')).links.html}" target="_blank">${JSON.parse(localStorage.getItem('background')).user.name}</a>`;
+            })
     }
-        
+
 }
 
 //Run
